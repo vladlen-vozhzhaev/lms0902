@@ -1,8 +1,6 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,12 +18,23 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/addRole', function (){
-    $roles = \App\Models\Role::all();
-    return view('pages.addRole', ['roles'=>$roles]);
+    return view('pages.addRole');
 });
-Route::post('/addRole', [UserController::class, 'addRole']);
-Route::get('/users', [UserController::class, 'showUsers']);
-Route::get('/changeUser/{id}', [UserController::class, 'showUserChangeRole']);
+Route::post('/addRole', function (\Illuminate\Http\Request $request){
+    $role = new \App\Models\Role();
+    $role->name = $request->name;
+    $role->save();
+    return "Роль успешно добавлена";
+});
+Route::get('/users', function (){
+    $users = \App\Models\User::all();
+    return view('pages.users', ['users'=>$users]);
+});
+Route::get('/changeUser/{id}', function (\Illuminate\Http\Request $request){
+    $user = \App\Models\User::where('id', $request->id)->first();
+    $roles = \App\Models\Role::all();
+    return view('pages.changeUser', ['user'=>$user, 'roles'=>$roles]);
+});
 Route::post('/changeUserRole', function (\Illuminate\Http\Request $request){
    $bindUserRole = new \App\Models\BindUserRole();
    $bindUserRole->user_id = $request->user_id;
@@ -33,10 +42,6 @@ Route::post('/changeUserRole', function (\Illuminate\Http\Request $request){
    $bindUserRole->save();
    return 'Роль успешно добавлена';
 });
-
-Route::get('/addStudentGroup', [StudentController::class, 'showAddStudentGroup']);
-Route::post('/addStudentGroup', [StudentController::class, 'addStudentGroup']);
-
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

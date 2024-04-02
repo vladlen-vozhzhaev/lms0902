@@ -15,7 +15,6 @@
                     <th scope="col">#</th>
                     <th scope="col">Имя</th>
                     <th scope="col">E-mail</th>
-                    <th scope="col">Роль</th>
                     <th scope="col">Управление</th>
                 </tr>
                 </thead>
@@ -25,7 +24,6 @@
                         <th scope="row">{{$user->id}}</th>
                         <td>{{$user->name}}</td>
                         <td>{{$user->email}}</td>
-                        <td>{{$user->role}}</td>
                         <td><a href="changeUser/{{$user->id}}">[изменить]</a></td>
                     </tr>
                 @endforeach
