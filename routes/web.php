@@ -43,9 +43,30 @@ Route::post('/changeUserRole', function (\Illuminate\Http\Request $request){
    return 'Роль успешно добавлена';
 });
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
+    $bindUserRole = \App\Models\BindUserRole::where('user_id', auth()->user()->getAuthIdentifier())->first();
+    if($bindUserRole->role_id == 1)
+        return redirect()->intended('/admin-dashboard');
+    else if($bindUserRole->role_id == 2)
+        return redirect()->intended('/teacher-dashboard');
+    else if($bindUserRole->role_id == 3)
+        return redirect()->intended('/student-dashboard');
+    else
+        return redirect()->intended('/guest-dashboard');
+})->middleware(['auth'])->name('dashboard');
+Route::get('/admin-dashboard', function (){
+   return view('admin.adminDashboard');
+})->middleware('auth');
+Route::get('/students', function (){
+   $users = \App\Models\User::all();
+   $students = new \Illuminate\Support\Collection();
+   foreach ($users as $user){
+       $userId = $user->id;
+       $bindUserRole = \App\Models\BindUserRole::where('user_id', $userId)->first();
+       if($bindUserRole->role_id == 3)
+           $students->add($user);
+   }
+   return view('admin.students', ['students'=>$students]);
+})->middleware('auth');
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

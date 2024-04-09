@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\BindUserRole;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -45,7 +46,11 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
-
+        $userId = $user->id;
+        $bindRole = new BindUserRole();
+        $bindRole->user_id = $userId;
+        $bindRole->role_id = 4;
+        $bindRole->save();
         return redirect(RouteServiceProvider::HOME);
     }
 }
