@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,59 +15,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/addRole', function (){
-    return view('pages.addRole');
-});
-Route::post('/addRole', function (\Illuminate\Http\Request $request){
-    $role = new \App\Models\Role();
-    $role->name = $request->name;
-    $role->save();
-    return "Роль успешно добавлена";
-});
-Route::get('/users', function (){
-    $users = \App\Models\User::all();
-    return view('pages.users', ['users'=>$users]);
-});
-Route::get('/changeUser/{id}', function (\Illuminate\Http\Request $request){
-    $user = \App\Models\User::where('id', $request->id)->first();
-    $roles = \App\Models\Role::all();
-    return view('pages.changeUser', ['user'=>$user, 'roles'=>$roles]);
-});
-Route::post('/changeUserRole', function (\Illuminate\Http\Request $request){
-   $bindUserRole = new \App\Models\BindUserRole();
-   $bindUserRole->user_id = $request->user_id;
-   $bindUserRole->role_id = $request->role_id;
-   $bindUserRole->save();
-   return 'Роль успешно добавлена';
-});
-Route::get('/dashboard', function () {
-    $bindUserRole = \App\Models\BindUserRole::where('user_id', auth()->user()->getAuthIdentifier())->first();
-    if($bindUserRole->role_id == 1)
-        return redirect()->intended('/admin-dashboard');
-    else if($bindUserRole->role_id == 2)
-        return redirect()->intended('/teacher-dashboard');
-    else if($bindUserRole->role_id == 3)
-        return redirect()->intended('/student-dashboard');
-    else
-        return redirect()->intended('/guest-dashboard');
-})->middleware(['auth'])->name('dashboard');
-Route::get('/admin-dashboard', function (){
-   return view('admin.adminDashboard');
-})->middleware('auth');
-Route::get('/students', function (){
-   $users = \App\Models\User::all();
-   $students = new \Illuminate\Support\Collection();
-   foreach ($users as $user){
-       $userId = $user->id;
-       $bindUserRole = \App\Models\BindUserRole::where('user_id', $userId)->first();
-       if($bindUserRole->role_id == 3)
-           $students->add($user);
-   }
-   return view('admin.students', ['students'=>$students]);
-})->middleware('auth');
+Route::view('/', 'welcome');
+Route::view('/addRole', 'pages.addRole')->middleware('admin');
+Route::post('/addRole', [UserController::class, 'addRole'])->middleware('admin');
+Route::get('/users', [UserController::class, 'showUsers'])->middleware('admin');
+Route::get('/changeUser/{id}', [UserController::class, 'showUserChangeRole'])->middleware('admin');
+Route::post('/changeUserRole', [UserController::class, 'changeUserRole'])->middleware('admin');
+Route::get('/dashboard', [UserController::class, 'showDashboard'])->middleware(['auth'])->name('dashboard');
+Route::view('/admin-dashboard', 'admin.adminDashboard')->middleware('admin');
+Route::get('/students', [UserController::class, 'showStudents'])->middleware('admin');
+Route::get('/addCourse', [\App\Http\Controllers\CourseController::class, 'showAddCourse'])->middleware('admin');
+Route::post('/addCourse', [\App\Http\Controllers\CourseController::class, 'addCourse'])->middleware('admin');
+Route::get('/courses', [\App\Http\Controllers\CourseController::class, 'showAllCourses'])->middleware('admin');
+Route::get('/courseEdit/{id}', [\App\Http\Controllers\CourseController::class, 'showEditCourse'])->middleware('admin');
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

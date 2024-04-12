@@ -85,7 +85,7 @@
 
     <!-- Theme CSS -->
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-
+    <script src="https://kit.fontawesome.com/47ae1cb85a.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
