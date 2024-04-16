@@ -14,7 +14,10 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+/*
+ * 1) Реализовать личный кабинет преподавателя
+ * 2) Реализовать личным кабинет студента
+ * */
 Route::view('/', 'welcome');
 Route::view('/addRole', 'pages.addRole')->middleware('admin');
 Route::post('/addRole', [UserController::class, 'addRole'])->middleware('admin');
@@ -28,6 +31,8 @@ Route::get('/addCourse', [\App\Http\Controllers\CourseController::class, 'showAd
 Route::post('/addCourse', [\App\Http\Controllers\CourseController::class, 'addCourse'])->middleware('admin');
 Route::get('/courses', [\App\Http\Controllers\CourseController::class, 'showAllCourses'])->middleware('admin');
 Route::get('/courseEdit/{id}', [\App\Http\Controllers\CourseController::class, 'showEditCourse'])->middleware('admin');
+Route::get('/addTeacherCourse/{userId}/{courseId}', [\App\Http\Controllers\CourseController::class, 'addTeacherCourse'])->middleware('admin');
+Route::get('/addStudentCourse/{userId}/{courseId}', [UserController::class, 'addStudentCourse'])->middleware('admin');
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BindStudentCourse;
 use App\Models\BindUserRole;
+use App\Models\Course;
 use App\Models\Role;
 use Illuminate\Http\Request;
 
@@ -49,12 +51,23 @@ class UserController extends Controller
     public function showStudents(){
         $users = \App\Models\User::all();
         $students = new \Illuminate\Support\Collection();
+        $courses = Course::all();
         foreach ($users as $user){
             $userId = $user->id;
             $bindUserRole = \App\Models\BindUserRole::where('user_id', $userId)->first();
             if($bindUserRole->role_id == 3)
                 $students->add($user);
         }
-        return view('admin.students', ['students'=>$students]);
+        return view('admin.students', ['students'=>$students, 'courses'=>$courses]);
+    }
+
+    public function addStudentCourse(Request $request){
+        $userId = $request->userId;
+        $courseId = $request->courseId;
+        $BindStudentCourse = new BindStudentCourse();
+        $BindStudentCourse->user_id = $userId;
+        $BindStudentCourse->course_id = $courseId;
+        $BindStudentCourse->save();
+        return json_encode(['result'=>'success']);
     }
 }

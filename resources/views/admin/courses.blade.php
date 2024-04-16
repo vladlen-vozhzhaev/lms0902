@@ -6,8 +6,8 @@
         <!-- Title -->
         <div class="row mb-3">
             <div class="col-12 d-sm-flex justify-content-between align-items-center">
-                <h1 class="h3 mb-2 mb-sm-0">Courses</h1>
-                <a href="instructor-create-course.html" class="btn btn-sm btn-primary mb-0">Create a Course</a>
+                <h1 class="h3 mb-2 mb-sm-0">Список курсов</h1>
+                <a href="/addCourse" class="btn btn-sm btn-primary mb-0">Добавить курс</a>
             </div>
         </div>
 
@@ -139,8 +139,7 @@
 
                                     <!-- Table data -->
                                     <td>
-                                        <a href="#" class="btn btn-sm btn-success-soft me-1 mb-1 mb-md-0">Approve</a>
-                                        <button class="btn btn-sm btn-secondary-soft mb-0">Reject</button>
+                                        <a href="/courseEdit/{{$course->id}}" class="btn btn-sm btn-success-soft me-1 mb-1 mb-md-0"><i class="fas fa-cog"></i></a>
                                     </td>
                                 </tr>
                             @endforeach

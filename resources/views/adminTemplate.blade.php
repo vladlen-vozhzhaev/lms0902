@@ -99,8 +99,8 @@
 
         <!-- Navbar brand for xl START -->
         <div class="d-flex align-items-center">
-            <a class="navbar-brand" href="index.html">
-                <img class="navbar-brand-item" src="assets/images/logo-light.svg" alt="">
+            <a class="navbar-brand" href="/">
+                <img class="navbar-brand-item" src="/assets/images/logo-light.svg" alt="">
             </a>
         </div>
         <!-- Navbar brand for xl END -->
@@ -120,18 +120,22 @@
                     <!-- menu item 2 -->
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#collapsepage" role="button" aria-expanded="false" aria-controls="collapsepage">
-                            <i class="bi bi-basket fa-fw me-2"></i>Courses
+                            <i class="fas fa-chalkboard-teacher me-2"></i>Courses
                         </a>
                         <!-- Submenu -->
                         <ul class="nav collapse flex-column" id="collapsepage" data-bs-parent="#navbar-sidebar">
-                            <li class="nav-item"> <a class="nav-link" href="admin-course-list.html">All Courses</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="/courses">All Courses</a></li>
                             <li class="nav-item"> <a class="nav-link" href="admin-course-category.html">Course Category</a></li>
                             <li class="nav-item"> <a class="nav-link" href="admin-course-detail.html">Course Detail</a></li>
                         </ul>
                     </li>
 
+                    <li class="nav-item">
+                        <a class="nav-link" href="/users"><i class="fas fa-users me-2"></i> Пользователи</a>
+                    </li>
+
                     <!-- Menu item 3 -->
-                    <li class="nav-item"> <a class="nav-link" href="admin-student-list.html"><i class="fas fa-user-graduate fa-fw me-2"></i>Students</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/students"><i class="fas fa-user-graduate fa-fw me-2"></i>Студенты</a></li>
 
                     <!-- Menu item 4 -->
                     <li class="nav-item">
@@ -434,7 +438,7 @@
 
 <!-- Back to top -->
 <div class="back-top"><i class="bi bi-arrow-up-short position-absolute top-50 start-50 translate-middle"></i></div>
-
+@yield('modal')
 <!-- Bootstrap JS -->
 <script src="/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -445,7 +449,7 @@
 
 <!-- Template Functions -->
 <script src="/assets/js/functions.js"></script>
-
+@yield('script')
 
 </body>
 </html>
