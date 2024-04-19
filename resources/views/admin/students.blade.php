@@ -81,12 +81,12 @@
                                             <!-- Edit dropdown -->
                                             <div class="dropdown text-end">
                                                 <a href="#" class="btn btn-sm btn-light btn-round small mb-0" role="button" id="dropdownShare2" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="fa-solid fa-ellipsis"></i>
+                                                    <i class="fas fa-ellipsis-h"></i>
                                                 </a>
                                                 <!-- dropdown button -->
                                                 <ul class="dropdown-menu dropdown-w-sm dropdown-menu-end min-w-auto shadow rounded" aria-labelledby="dropdownShare2">
-                                                    <li><a data-student-id="{{$student->id}}" class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-pencil-square fa-fw me-2"></i>Назначить курс</a></li>
-                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-trash fa-fw me-2"></i>Remove</a></li>
+                                                    <li><a data-student-id="{{$student->id}}" class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fas fa-cog"></i> Назначить курс</a></li>
+                                                    <li><a class="dropdown-item" href="/deleteStudent/{{$student->id}}"><i class="fas fa-trash-alt"></i> Удалить</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -487,14 +487,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                 </div>
                 <div class="modal-body">
-                    <ul>
-                        @foreach($courses as $course)
-                            <li>
-                                {{$course->name}}
-                                {{--Подумайте как убрать кнопку, если курс уже назначен--}}
-                                <button onclick="addStudentCourse(this)" class="btn btn-sm btn-primary" data-course-id="{{$course->id}}">назначить</button>
-                            </li>
-                        @endforeach
+                    <ul id="courseList">
                     </ul>
                 </div>
                 <div class="modal-footer">
@@ -508,10 +501,38 @@
 @section('script')
     <script>
         const myModalEl = document.getElementById('exampleModal');
+        const courseList = document.getElementById('courseList');
         let studentId = 0;
         myModalEl.addEventListener('show.bs.modal', event => {
             console.log(event.relatedTarget.dataset.studentId)
             studentId = event.relatedTarget.dataset.studentId;
+            courseList.innerHTML = "";
+            fetch('/getBindStudentCourse/'+studentId)
+                .then(response=>response.json())
+                .then(result=>{
+                    console.log(result);
+                    result.courses.forEach(course=>{
+                        let appointBtn = true;
+                        result.bindCourses.forEach(bindCourse=>{
+                           if(bindCourse.course_id === course.id){
+                                appointBtn = false
+                           }
+                        });
+                        const li = document.createElement('li');
+                        const span = document.createElement('span');
+                        span.innerText = course.name;
+                        li.append(span);
+                        if(appointBtn){
+                            const btn = document.createElement('button');
+                            btn.onclick = ()=>{addStudentCourse(btn)}
+                            btn.dataset.courseId = course.id;
+                            btn.innerText = "назначить";
+                            btn.classList.add('btn', 'btn-sm', 'btn-primary');
+                            li.append(btn);
+                        }
+                        courseList.append(li);
+                    })
+                })
         })
 
         function addStudentCourse(btn){

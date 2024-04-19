@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,12 +28,17 @@ Route::post('/changeUserRole', [UserController::class, 'changeUserRole'])->middl
 Route::get('/dashboard', [UserController::class, 'showDashboard'])->middleware(['auth'])->name('dashboard');
 Route::view('/admin-dashboard', 'admin.adminDashboard')->middleware('admin');
 Route::get('/students', [UserController::class, 'showStudents'])->middleware('admin');
+Route::get('/getBindStudentCourse/{studentId}', [UserController::class, 'getBindStudentCourse'])->middleware('admin');
+Route::get('/deleteStudent/{userId}', [UserController::class, 'deleteStudent'])->middleware('admin');
 Route::get('/addCourse', [\App\Http\Controllers\CourseController::class, 'showAddCourse'])->middleware('admin');
 Route::post('/addCourse', [\App\Http\Controllers\CourseController::class, 'addCourse'])->middleware('admin');
 Route::get('/courses', [\App\Http\Controllers\CourseController::class, 'showAllCourses'])->middleware('admin');
 Route::get('/courseEdit/{id}', [\App\Http\Controllers\CourseController::class, 'showEditCourse'])->middleware('admin');
 Route::get('/addTeacherCourse/{userId}/{courseId}', [\App\Http\Controllers\CourseController::class, 'addTeacherCourse'])->middleware('admin');
 Route::get('/addStudentCourse/{userId}/{courseId}', [UserController::class, 'addStudentCourse'])->middleware('admin');
+Route::get('/teachers', [UserController::class, 'showTeachers'])->middleware('admin');
+Route::get('/getBindTeacherCourse/{teacherId}', [TeacherController::class, 'getBindTeacherCourse'])->middleware('admin');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
