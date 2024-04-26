@@ -1,4 +1,4 @@
-@extends('template')
+@extends('adminTemplate')
 @section('content')
     <!-- Page main content START -->
     <div class="page-content-wrapper border">
@@ -6,7 +6,7 @@
         <!-- Title -->
         <div class="row">
             <div class="col-12">
-                <h1 class="h3 mb-2 mb-sm-0">Students</h1>
+                <h1 class="h3 mb-2 mb-sm-0">Пользователи</h1>
             </div>
         </div>
 

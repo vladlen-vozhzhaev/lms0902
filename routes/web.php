@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\Route;
  * 1) Реализовать личный кабинет преподавателя
  * 2) Реализовать личным кабинет студента
  * */
-Route::view('/', 'welcome');
+Route::view('/', 'pages.mainPage');
 Route::view('/addRole', 'pages.addRole')->middleware('admin');
 Route::post('/addRole', [UserController::class, 'addRole'])->middleware('admin');
 Route::get('/users', [UserController::class, 'showUsers'])->middleware('admin');
@@ -38,6 +39,10 @@ Route::get('/addTeacherCourse/{userId}/{courseId}', [\App\Http\Controllers\Cours
 Route::get('/addStudentCourse/{userId}/{courseId}', [UserController::class, 'addStudentCourse'])->middleware('admin');
 Route::get('/teachers', [UserController::class, 'showTeachers'])->middleware('admin');
 Route::get('/getBindTeacherCourse/{teacherId}', [TeacherController::class, 'getBindTeacherCourse'])->middleware('admin');
+Route::get('/student-dashboard', [StudentController::class, 'showDashboard'])->middleware('auth');
+Route::get('/editProfile', [UserController::class, 'showEditProfile'])->middleware('auth');
+Route::post('/changeUserAvatar', [UserController::class, 'changeUserAvatar'])->middleware('auth');
+Route::get('/guest-dashboard', function (){return "hello";})->middleware('verified');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

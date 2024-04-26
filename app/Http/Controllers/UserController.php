@@ -101,5 +101,18 @@ class UserController extends Controller
         }
         return view('admin.teachers', ['teachers'=>$teachers]);
     }
+
+    function showEditProfile(){
+        return view('pages.editProfile');
+    }
+
+    function changeUserAvatar(Request $request){
+        $path = $request->file('userAvatar')->store('public/avatars');
+        $path = str_replace('public', '/storage', $path);
+        $user = auth()->user();
+        $user->img = $path;
+        $user->save();
+        return $path;
+    }
 }
 

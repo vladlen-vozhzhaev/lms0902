@@ -2,7 +2,16 @@
 @section('content')
     <div class="container my-5">
         <div class="col-sm-6 mx-auto">
-            <h2 class="text-center">Регистрация на сайте</h2>
+            <h2 class="text-center my-3">Регистрация на сайте</h2>
+            @if($errors->any())
+                <div class="alert alert-danger" role="alert">
+                    <ul>
+                        @foreach($errors->all() as $error)
+                            <li>{{$error}}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <form action="/register" method="post">
                 @csrf
                 <div class="mb-3">

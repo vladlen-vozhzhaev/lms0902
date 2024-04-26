@@ -1,25 +1,27 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+@extends('template')
+@section('content')
+    <div class="col-sm-7 mx-auto">
+        <div class="alert alert-info" role="alert">
+            <h3 class="my-3 text-center">Восстановление пароля</h3>
+            @if($errors->any())
+                <div class="alert alert-danger" role="alert">
+                    <ul>
+                        @foreach($errors->all() as $error)
+                            <li>{{$error}}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            <p>Для восстановления пароля напишите e-mail на который будет отправлена ссылка с подвтреждением</p>
+            <form action="{{route('password.email')}}" method="post">
+                @csrf
+                <div class="mb-3">
+                    <input name="email" type="email" required class="form-control" placeholder="E-mail">
+                </div>
+                <div class="mb-3">
+                    <input type="submit" class="btn btn-primary form-control" value="Отправить ссылку для восстановления пароля">
+                </div>
+            </form>
+        </div>
     </div>
-
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-
-    <form method="POST" action="{{ route('password.email') }}">
-        @csrf
-
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+@endsection

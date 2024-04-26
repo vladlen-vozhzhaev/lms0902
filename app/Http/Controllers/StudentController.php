@@ -18,4 +18,7 @@ class StudentController extends Controller
         $studentGroup->save();
         return redirect()->intended('/addStudentGroup');
     }
+    public function showDashboard(){
+        return view('student.studentDashboard');
+    }
 }
