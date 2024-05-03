@@ -42,7 +42,7 @@ Route::get('/getBindTeacherCourse/{teacherId}', [TeacherController::class, 'getB
 Route::get('/student-dashboard', [StudentController::class, 'showDashboard'])->middleware('auth');
 Route::get('/editProfile', [UserController::class, 'showEditProfile'])->middleware('auth');
 Route::post('/changeUserAvatar', [UserController::class, 'changeUserAvatar'])->middleware('auth');
-Route::get('/guest-dashboard', function (){return "hello";})->middleware('verified');
+Route::get('/guest-dashboard', function (){return "Статус не назначен";})->middleware('verified');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

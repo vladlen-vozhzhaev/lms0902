@@ -11,8 +11,7 @@
                 </ul>
             </div>
         @endif
-        <form action="{{ route('password.update') }}" method="POST">
-            @method('PUT')
+        <form action="{{ route('password.store') }}" method="POST">
             @csrf
             <input type="hidden" name="token" value="{{ $request->route('token') }}">
             <div class="mb-3">
