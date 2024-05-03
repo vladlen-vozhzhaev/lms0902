@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BindLectureCourses;
 use App\Models\BindTeacherCourse;
 use App\Models\BindUserRole;
 use App\Models\Course;
+use App\Models\Lecture;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -49,5 +51,49 @@ class CourseController extends Controller
         $bindTeacherCourse->course_id = $courseId;
         $bindTeacherCourse->save();
         return redirect()->intended('/courseEdit/'.$courseId);
+    }
+    public function showLectures(Request $request){
+        $courseId = $request->id;
+        $bindLectures = BindLectureCourses::where('course_id', $courseId)->get();
+        $lectures = [];
+        foreach ($bindLectures as $bindLecture){
+            $lecture = Lecture::where('id', $bindLecture->lecture_id)->first();
+            $lectures[] = $lecture;
+        }
+        return view('pages.lectures', ['lecture'=>$lectures]);
+    }
+
+    public function showAddLecture(){
+        return view('admin.addLecture');
+    }
+
+    public function addLecture(Request $request){
+        $name = $request->name;
+        $description = $request->description;
+        $lecture = new Lecture();
+        $lecture->name = $name;
+        $lecture->description = $description;
+        $lecture->save();
+        return redirect()->intended('/dashboard');
+    }
+    public function showBindLecture(){
+        $lectures = Lecture::all();
+        $courses = Course::all();
+        return view('admin.bindLecture', ['lectures'=>$lectures, 'courses'=>$courses]);
+    }
+    public function bindLectureWithCourse(Request $request){
+        $courseId = $request->course_id;
+        $lectureId = $request->lecture_id;
+        $bind = BindLectureCourses::where(['course_id'=>$courseId, 'lecture_id'=>$lectureId])->first();
+        if(!empty($bind)){
+            return redirect()->intended('/lectures/'.$courseId);
+        }else{
+            $bindLecture = new BindLectureCourses();
+            $bindLecture->lecture_id = $lectureId;
+            $bindLecture->course_id = $courseId;
+            $bindLecture->save();
+            return redirect()->intended('/lectures/'.$courseId);
+        }
+
     }
 }

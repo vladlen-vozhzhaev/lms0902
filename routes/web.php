@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
@@ -31,11 +32,11 @@ Route::view('/admin-dashboard', 'admin.adminDashboard')->middleware('admin');
 Route::get('/students', [UserController::class, 'showStudents'])->middleware('admin');
 Route::get('/getBindStudentCourse/{studentId}', [UserController::class, 'getBindStudentCourse'])->middleware('admin');
 Route::get('/deleteStudent/{userId}', [UserController::class, 'deleteStudent'])->middleware('admin');
-Route::get('/addCourse', [\App\Http\Controllers\CourseController::class, 'showAddCourse'])->middleware('admin');
-Route::post('/addCourse', [\App\Http\Controllers\CourseController::class, 'addCourse'])->middleware('admin');
-Route::get('/courses', [\App\Http\Controllers\CourseController::class, 'showAllCourses'])->middleware('admin');
-Route::get('/courseEdit/{id}', [\App\Http\Controllers\CourseController::class, 'showEditCourse'])->middleware('admin');
-Route::get('/addTeacherCourse/{userId}/{courseId}', [\App\Http\Controllers\CourseController::class, 'addTeacherCourse'])->middleware('admin');
+Route::get('/addCourse', [CourseController::class, 'showAddCourse'])->middleware('admin');
+Route::post('/addCourse', [CourseController::class, 'addCourse'])->middleware('admin');
+Route::get('/courses', [CourseController::class, 'showAllCourses'])->middleware('admin');
+Route::get('/courseEdit/{id}', [CourseController::class, 'showEditCourse'])->middleware('admin');
+Route::get('/addTeacherCourse/{userId}/{courseId}', [CourseController::class, 'addTeacherCourse'])->middleware('admin');
 Route::get('/addStudentCourse/{userId}/{courseId}', [UserController::class, 'addStudentCourse'])->middleware('admin');
 Route::get('/teachers', [UserController::class, 'showTeachers'])->middleware('admin');
 Route::get('/getBindTeacherCourse/{teacherId}', [TeacherController::class, 'getBindTeacherCourse'])->middleware('admin');
@@ -43,6 +44,10 @@ Route::get('/student-dashboard', [StudentController::class, 'showDashboard'])->m
 Route::get('/editProfile', [UserController::class, 'showEditProfile'])->middleware('auth');
 Route::post('/changeUserAvatar', [UserController::class, 'changeUserAvatar'])->middleware('auth');
 Route::get('/guest-dashboard', function (){return "Статус не назначен";})->middleware('verified');
+Route::get('/addLecture', [CourseController::class, 'showAddLecture'])->middleware('admin');
+Route::post('/addLecture', [CourseController::class, 'addLecture'])->middleware('admin');
+Route::post('/bindLectureWithCourse', [CourseController::class, 'bindLectureWithCourse'])->middleware('admin');
+Route::get('/bindLectureWithCourse', [CourseController::class, 'showBindLecture'])->middleware('admin');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
